@@ -6,14 +6,18 @@
     "bluebird": "^3.5.0",
     "bson": "^1.0.4",
     "cheerio": "^0.22.0",
+    "forever": "^0.15.3",
     "lodash": "^4.17.4",
     "md5": "^2.2.1",
+    "moment": "^2.18.1",
+    "mongoose": "^4.9.8",
     "nodemailer": "^4.0.1",
     "nodemailer-promise": "^1.0.3",
     "nodemailer-smtp-transport": "^2.7.4",
     "numeral": "^2.0.6",
     "phantom": "^4.0.3",
     "phantomjs": "^2.1.7",
+    "request-promise": "^4.2.1",
     "tough-cookie": "^2.3.2",
     "xoauth2": "^1.2.0"
   }
