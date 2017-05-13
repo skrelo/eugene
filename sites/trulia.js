@@ -52,7 +52,8 @@ class Trulia extends Sites {
 					img = img.match(/url\('(.*?)'\)/);
 					listing.photo = "https:" + img[1];
 
-					rentals.push( listing );
+					const id = `${listing.id}${this.source}`
+					rentals.push(listing);
 					return true;
 				} );
 			} ).catch( ( err ) => {

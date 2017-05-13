@@ -2,6 +2,7 @@ const url = "https://eugene.craigslist.org/search/apa?min_price=1200&max_price=1
 
 const moment = require('moment');
 let rentals = [];
+let count = 0;
 const Sites = require('../sites');
 const Promise = require('bluebird');
 const cheerio = require('cheerio');
@@ -74,8 +75,9 @@ class Craigslist extends Sites {
 						};
 						//console.log( $_.html());
 
-						rentals.push( listing );
-
+						const objId = listing.id + this.source;
+						rentals.push(listing);
+						count++;
 						return true;
 					} ).catch( ( err ) => {
 						console.log( `Issue getting ${listingUrl}`, err );
@@ -83,7 +85,7 @@ class Craigslist extends Sites {
 					} );
 				}
 			} ).then( () => {
-				console.log('craigslist adding listings');
+				console.log( this.name + ' rentals', rentals.length );
 				return super.addListings( rentals );
 			});
 		} );

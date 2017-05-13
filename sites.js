@@ -110,14 +110,15 @@ module.exports = class Sites {
 	}
 
 	addListings( listings ) {
-		let fullListings = [];
+		let fullListings = {};
 		const vm = this;
 		return Promise.each( listings, ( listing ) => {
 			return this.Rentals.find( { id: listing.id, source: listing.source } ).then( ( existing ) => {
 				if ( !existing.length ) {
 					var rental = new this.Rentals( listing );
 					return rental.save().then( () => {
-						fullListings.push( listing );
+						const objId = listing.id + listing.source;
+						fullListings[objId] = listing;
 						return true;
 					} ).catch( ( err ) => {
 						console.log( 'err save', err);
@@ -125,7 +126,6 @@ module.exports = class Sites {
 						process.exit();
 					} );
 				}else {
-					console.log( 'existed');
 					return true;
 				}
 			} ).catch( ( err ) => {
@@ -135,9 +135,8 @@ module.exports = class Sites {
 			} );
 
 		} ).then( () => {
-			console.log( 'resolved');
 			//return vm.sendListings( fullListings );
-			return Promise.resolve(fullListings);
+			return fullListings;
 		} ).catch( ( err ) => {
 			console.log( 'err', err);
 			throw err;
@@ -146,7 +145,6 @@ module.exports = class Sites {
 	}
 
 	sendListings( listings ) {
-		console.log( 'retrieving listings', listings.length );
 		if ( listings.length ) {
 
 			const html = mail.format( listings );
@@ -155,7 +153,7 @@ module.exports = class Sites {
 			console.log( 'No listings to send' );
 		}
 		this.done();
-		return Promise.resolve(html);
+		return html;
 	}
 
 	execBin() {

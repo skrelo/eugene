@@ -16,8 +16,10 @@ const transport = email.createTransport( {
 
 let runOnly = [];//['premier'];
 
-let listings = [];
+let listings = {};
 let activeSites = [];
+let siteRan = [];
+
 Promise.each( sites, ( site ) => {
 	let bypass = false;
 	let dontRun = false;
@@ -31,19 +33,26 @@ Promise.each( sites, ( site ) => {
 		}
 	}
 	if ( true === siteObj.active || true === bypass ) {
-		console.log( 'running' );
-		return siteObj.run().then( ( list ) => {
-			listings = listings.concat( listings, list );
-			//siteObj.done();
-			activeSites.push(siteObj);
+		if ( _.indexOf(siteRan, siteObj.source) > -1) {
 			return true;
-		} );
+		}else {
+			console.log( 'Running ' + siteObj.name );
+			return siteObj.run().then( ( list ) => {
+				//listings = listings.concat( listings, list );
+				listings = Object.assign( {}, listings, list);
+				//siteObj.done();
+				activeSites.push( siteObj );
+				siteRan.push( siteObj.source );
+				return true;
+			} );
+		}
 	} else {
 		return true;
 	}
 } ).then( () => {
-	console.log( `SENDING ${listings.length} LISTINGS` );
-	if ( listings.length) {
+	let len = Object.keys(listings).length;
+	console.log( `SENDING ${len} LISTINGS` );
+	if ( activeSites.length) {
 		const html = mail.format( listings );
 		mail.send( transport, html );
 	}

@@ -1,7 +1,5 @@
 var url = "http://housing.registerguard.com/homes/search/results?terms=for-rent#PropertyType_singlefamily=single_family%7C1%7C&page=1";
 
-
-
 const moment = require( 'moment' );
 const _ = require('lodash');
 const Sites = require( '../sites' );
@@ -10,6 +8,7 @@ const Promise = require('bluebird');
 const request = require('request-promise');
 const md5 = require('md5');
 let rentals = [];
+let count = 0;
 
 class RegisterGuard extends Sites {
 	constructor() {
@@ -25,14 +24,7 @@ class RegisterGuard extends Sites {
 		return super.execPage().then( ( $ ) => {
 			const listings =  $( '#docHolder').children('.aiResultsWrapper');
 			var l = [];
-			/*console.log( listings.toArray());
-			process.exit();
-			for( let id in listings) {
-				id = parseInt( id );
-				if ( _.isNumber( id ) && !_.isNaN( id ) ) {
-					l.push( listings[ id ] );
-				}
-			}*/
+
 			return Promise.each(listings.toArray(), (item) => {
 				let listingUrl = 'http://housing.registerguard.com' + $(item).find( '.aiResultsDescriptionNoAdvert' ).children('a').attr( 'href' );
 				let options = {
@@ -77,13 +69,15 @@ class RegisterGuard extends Sites {
 					return request( noptions ).then( ( $__ ) => {
 						listing.description = String($__( '.detailDesc' ).html()).trim();
 						listing.id = md5(listing.description + listing.title);
-						rentals.push( listing );
-						return Promise.resolve();
+						const objId = listing.id + this.source;
+						rentals.push(listing);
+						count++;
+						return true;
 					} );
 				});
 
 			}).then( () => {
-				console.log('adding listings');
+				console.log( this.name + ' rentals', rentals.length );
 				return super.addListings( rentals );
 			});
 		} );

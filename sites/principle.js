@@ -2,7 +2,10 @@ const url = "https://principle.appfolio.com/listings/";
 
 const Sites = require( '../sites' );
 const moment = require( 'moment' );
+const Promise = require( 'bluebird' );
+
 let rentals = [];
+let count = 0;
 
 class Premier extends Sites {
 	constructor() {
@@ -16,8 +19,8 @@ class Premier extends Sites {
 	run() {
 		return super.execPage().then( ( $ ) => {
 
-			const listings = $( '#result_container' ).children( '.listing-item' );
-			listings.each( ( index, item ) => {
+			const listings = $( '#result_container' ).children( '.listing-item' ).toArray();
+			return Promise.each( listings, (item ) => {
 
 				let listing = {
 					id         : $( item ).attr( 'id' ),
@@ -55,10 +58,14 @@ class Premier extends Sites {
 							break;
 					}
 				} );
-				rentals.push( listing );
-			} );
-			console.log( 'rentals', rentals.length );
-			return super.addListings( rentals );
+				const objId = listing.id + this.source;
+				rentals.push(listing);
+				count++;
+				return true;
+			} ).then ( () => {
+				console.log( this.name + ' rentals', rentals.length );
+				return super.addListings( rentals );
+			});
 		} )
 
 

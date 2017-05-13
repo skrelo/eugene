@@ -2,8 +2,10 @@
 const url = "https://jenningsgroup.appfolio.com/listings";
 
 const Sites = require('../sites');
+const Promise = require('bluebird');
 const moment = require('moment');
 let rentals = [];
+let count = 0;
 
 class Jennings extends Sites {
 	constructor() {
@@ -17,8 +19,8 @@ class Jennings extends Sites {
 	run() {
 		return super.execPage().then( ( $ ) => {
 
-			const listings = $( '#result_container' ).children( '.listing-item' );
-			listings.each( ( index, item ) => {
+			const listings = $( '#result_container' ).children( '.listing-item' ).toArray();
+			return Promise.each(listings, ( item ) => {
 				//console.log($(item).html());process.exit();
 				let bb = $( item ).find( '.js-listing-blurb-bed-bath' ).text();
 				let bed = bb.match( /^(\d{1,}) bd/ );
@@ -46,12 +48,18 @@ class Jennings extends Sites {
 					beds         : bed ? bed[ 1 ] : 0,
 					baths        : bath ? bath[ 1 ] : 0,
 					dateNotActual: true,
-					link         : 'https://trio.appfolio.com' + $( item ).find( '.js-hand-hidden-link-to-detail' ).attr( 'href' )
+					link         : 'https://jenningsgroup.appfolio.com' + $( item ).find( '.js-hand-hidden-link-to-detail' ).attr( 'href' )
 				};
-				rentals.push( listing );
-			} );
-			console.log( 'rentals', rentals.length );
-			return super.addListings( rentals );
+				const objId = listing.id + this.source;
+				rentals.push(listing);
+				count++;
+				return true;
+			} ).then( () => {
+				console.log( this.name + ' rentals', rentals.length );
+				return super.addListings( rentals );
+			}).catch( (err) => {
+				console.log( 'err' + this.source, err );
+			});
 		} )
 
 

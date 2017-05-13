@@ -2,9 +2,12 @@
 const url = "https://chinookproperties.appfolio.com/listings";
 
 const Sites = require( '../sites' );
+const Promise = require( 'bluebird' );
+
 const moment = require( 'moment' );
 const _ = require('lodash');
 let rentals = [];
+let count = 0;
 
 class Chinook extends Sites {
 	constructor() {
@@ -18,8 +21,12 @@ class Chinook extends Sites {
 	run() {
 		return super.execPage().then( ( $ ) => {
 
-			const listings = $( '#result_container' ).children( '.listing-item' );
-			listings.each( ( index, item ) => {
+			const listings = $( '#result_container' ).children( '.listing-item' ).toArray();
+			if ( !listings) {
+				console.log( "Could not find listings!" );
+				process.exit();
+			}
+			return Promise.each( listings, ( item ) => {
 
 				let listing = {
 					id         : $( item ).attr( 'id' ),
@@ -57,10 +64,14 @@ class Chinook extends Sites {
 							break;
 					}
 				} );
-				rentals.push( listing );
-			} );
-			console.log( 'rentals', rentals.length );
-			return super.addListings( rentals );
+				const objId = listing.id + this.source;
+				rentals.push(listing);
+				count++;
+				return true;
+			} ).then ( () => {
+				console.log( this.name + ' rentals', rentals.length );
+				return super.addListings( rentals );
+			});
 		} )
 
 

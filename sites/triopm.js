@@ -15,7 +15,10 @@ let cookie = {
 const moment = require( 'moment' );
 
 const Sites = require( '../sites' );
+const Promise = require( 'bluebird' );
+
 let rentals = [];
+let count = 0;
 
 class TrioPM extends Sites {
 	constructor() {
@@ -29,8 +32,8 @@ class TrioPM extends Sites {
 	run() {
 		//super.setCookie( cookie, "http://triopm.com");
 		return super.execPage().then( ( $ ) => {
-			const listings =  $( '#result_container' ).children( '.listing-item' );
-			listings.each( (index, item) => {
+			const listings =  $( '#result_container' ).children( '.listing-item' ).toArray();
+			return Promise.each( listings, (item) => {
 				let bb = $(item).find( '.js-listing-blurb-bed-bath' ).text();
 				let bed = bb.match(/^(\d{1,}) bd/);
 				let bath = bb.match(/(\d{1,}) ba/);
@@ -59,10 +62,13 @@ class TrioPM extends Sites {
 					dateNotActual: true,
 					link    : 'https://trio.appfolio.com' + $(item).find( '.js-hand-hidden-link-to-detail' ).attr( 'href' )
 				};
+				const objId = listing.id + this.source;
 				rentals.push(listing);
+				count++;
+			}).then( () => {
+				console.log( this.name + ' rentals', rentals.length );
+				return super.addListings( rentals );
 			});
-			console.log( 'rentals', rentals.length);
-			return super.addListings(rentals);
 		} );
 	}
 }
