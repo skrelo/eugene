@@ -58,8 +58,8 @@ function Index() {
 			const html = mail.format( listings );
 			mail.send( transport, html );
 		}else {
-			console.log( 'NO NEW LISTINGS');
-
+			console.log( 'NO NEW LISTINGS' );
+		}
 		/*activeSites.forEach( ( site ) => {
 			site.done();
 		} );*/
