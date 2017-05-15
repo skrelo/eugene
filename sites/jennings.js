@@ -4,8 +4,7 @@ const url = "https://jenningsgroup.appfolio.com/listings";
 const Sites = require('../sites');
 const Promise = require('bluebird');
 const moment = require('moment');
-let rentals = [];
-let count = 0;
+
 
 class Jennings extends Sites {
 	constructor() {
@@ -17,6 +16,8 @@ class Jennings extends Sites {
 	}
 
 	run() {
+		let rentals = [];
+		let count = 0;
 		return super.execPage().then( ( $ ) => {
 
 			const listings = $( '#result_container' ).children( '.listing-item' ).toArray();

@@ -17,8 +17,7 @@ const moment = require( 'moment' );
 const Sites = require( '../sites' );
 const Promise = require( 'bluebird' );
 
-let rentals = [];
-let count = 0;
+
 
 class TrioPM extends Sites {
 	constructor() {
@@ -30,6 +29,8 @@ class TrioPM extends Sites {
 	}
 
 	run() {
+		let rentals = [];
+		let count = 0;
 		//super.setCookie( cookie, "http://triopm.com");
 		return super.execPage().then( ( $ ) => {
 			const listings =  $( '#result_container' ).children( '.listing-item' ).toArray();

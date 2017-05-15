@@ -4,8 +4,7 @@ const Sites = require( '../sites' );
 const moment = require( 'moment' );
 const Promise = require( 'bluebird' );
 
-let rentals = [];
-let count = 0;
+
 
 class FullHouse extends Sites {
 	constructor() {
@@ -17,6 +16,8 @@ class FullHouse extends Sites {
 	}
 
 	run() {
+		let rentals = [];
+		let count = 0;
 		return super.execPage().then( ( $ ) => {
 
 			const listings = $( '#result_container' ).children( '.listing-item' ).toArray();

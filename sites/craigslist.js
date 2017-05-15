@@ -22,6 +22,8 @@ class Craigslist extends Sites {
 	}
 
 	run() {
+		let rentals = [];
+		let count = 0;
 		return super.execPage().then( ( $ ) => {
 			let listings = $( '#sortable-results' ).children( '.rows' ).children( '.result-row' ).toArray();
 			listings = [listings[0]];

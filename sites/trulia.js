@@ -5,7 +5,7 @@ const moment = require('moment');
 const cheerio = require('cheerio');
 const Promise = require('bluebird');
 const request = require('request-promise');
-let rentals = [];
+
 
 class Trulia extends Sites {
 	constructor() {
@@ -18,11 +18,15 @@ class Trulia extends Sites {
 	}
 
 	run() {
+		let rentals = [];
 		return super.execPage().then( ( $ ) => {
+			let rentals = [];
 			const listings = $( '.mvn.containerFluid' ).children( 'li.smlCol12' ).toArray();
 			return Promise.each( listings, ( item ) => {
+				let id = $(item).find('.tileLink').attr('href');
+				id = id.match(/\/rental\/(\d{1,})-/);
 				let listing = {
-					id        : $( item ).attr( 'data-reactid' ),
+					id        : id[1],//$( item ).attr( 'data-reactid' ),
 					//photo     : $( item ).find( '.cardPhoto' ).css( 'background-image' ),
 					price     : $( item ).find( '.cardPrice' ).text(),
 					beds      : $( item ).find( 'li[data-auto-test="beds"]' ).text(),
@@ -61,7 +65,7 @@ class Trulia extends Sites {
 				return true;
 			} );
 		} ).then( () => {
-			console.log( 'adding listings' );
+			console.log( this.name + ' rentals', rentals.length );
 			return super.addListings( rentals );
 		} );
 	}

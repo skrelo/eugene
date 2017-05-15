@@ -7,8 +7,7 @@ const cheerio = require('cheerio');
 const Promise = require('bluebird');
 const request = require('request-promise');
 const md5 = require('md5');
-let rentals = [];
-let count = 0;
+
 
 class RegisterGuard extends Sites {
 	constructor() {
@@ -20,6 +19,8 @@ class RegisterGuard extends Sites {
 	}
 
 	run() {
+		let rentals = [];
+		let count = 0;
 		//super.setCookie( cookie, "http://RegisterGuard.com");
 		return super.execPage().then( ( $ ) => {
 			const listings =  $( '#docHolder').children('.aiResultsWrapper');
