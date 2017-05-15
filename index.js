@@ -67,4 +67,4 @@ function Index() {
 
 }
 
-setInterval( Index, 300000);
+setInterval( Index, 1800000);
