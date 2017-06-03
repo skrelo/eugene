@@ -68,3 +68,4 @@ function Index() {
 }
 
 setInterval( Index, 1800000);
+Index();

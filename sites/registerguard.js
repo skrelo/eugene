@@ -28,6 +28,7 @@ class RegisterGuard extends Sites {
 
 			return Promise.each(listings.toArray(), (item) => {
 				let listingUrl = 'http://housing.registerguard.com' + $(item).find( '.aiResultsDescriptionNoAdvert' ).children('a').attr( 'href' );
+
 				let options = {
 					method   : 'GET',
 					uri      : listingUrl,
@@ -58,23 +59,27 @@ class RegisterGuard extends Sites {
 					listing.sourceName = this.name;
 					listing.sourceImage = this.image;
 
-					const desciframe = $_( '#iframeDescription' ).attr( 'src' );
 
-					var noptions = {
+					/**
+					 * It seems the description is no longer in an iframe
+					 */
+					//const desciframe = $_( '#iframeDescription' ).attr( 'src' );
+
+					/*var noptions = {
 						method   : 'GET',
 						uri      : `http://housing.registerguard.com${desciframe}`,
 						transform: ( body ) => {
 							return cheerio.load( body );
 						}
-					};
-					return request( noptions ).then( ( $__ ) => {
-						listing.description = String($__( '.detailDesc' ).html()).trim();
+					};*/
+					//return request( noptions ).then( ( $__ ) => {
+						listing.description = String($_( '[itemprop="description"]' ).html()).trim();
 						listing.id = md5(listing.description + listing.title);
 						const objId = listing.id + this.source;
 						rentals.push(listing);
 						count++;
 						return true;
-					} );
+					//} );
 				});
 
 			}).then( () => {
