@@ -15,6 +15,7 @@ const transport = email.createTransport( {
 } );
 
 let runOnly = [];//['premier'];
+let noRun = ['premier'];
 
 
 function Index() {
@@ -34,6 +35,13 @@ function Index() {
 				bypass = true;
 			}
 		}
+		if ( noRun.length) {
+			if ( _.indexOf( noRun, siteObj.source ) > -1 ) {
+				siteObj.active = false;
+				bypass = false;
+			}
+		}
+
 		if ( true === siteObj.active || true === bypass ) {
 			if ( _.indexOf( siteRan, siteObj.source ) > -1 ) {
 				return true;
