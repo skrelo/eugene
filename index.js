@@ -14,7 +14,7 @@ const transport = email.createTransport( {
 	}
 } );
 
-let runOnly = [];//['premier'];
+let runOnly = ['craigslist'];//['premier'];
 let noRun = ['premier','jennings','triopm','fullhouse','northwoods','premier','principle','registerguard'];
 
 

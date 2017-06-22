@@ -32,7 +32,7 @@ class Craigslist extends Sites {
 				if ( _.isUndefined(listingUrl) ) {
 					return true;
 				}else {
-					listingUrl = listingUrl.indexOf( '.craigslist.org' ) > -1 ? "https:" + listingUrl : "https://eugene.craigslist.org" + listingUrl;
+					listingUrl = listingUrl.indexOf( '.craigslist.org' ) > -1 ? "https:" + listingUrl : "https://roseburg.craigslist.org" + listingUrl;
 					let options = {
 						method   : 'GET',
 						uri      : listingUrl,
