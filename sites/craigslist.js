@@ -1,4 +1,4 @@
-const url = "https://roseburg.craigslist.org/search/apa?min_price=1200&max_price=1800&availabilityMode=1&pets_dog=1&housing_type=6";
+const url = "https://roseburg.craigslist.org/search/apa?min_price=600&max_price=1800&availabilityMode=2&housing_type=2&housing_type=3&housing_type=4&housing_type=6&housing_type=9";
 
 const moment = require('moment');
 let rentals = [];
