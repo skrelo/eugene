@@ -1,4 +1,4 @@
-const url = "https://eugene.craigslist.org/search/apa?min_price=1200&max_price=1800&availabilityMode=1&pets_dog=1&housing_type=6";
+const url = "https://roseburg.craigslist.org/search/apa?min_price=1200&max_price=1800&availabilityMode=1&pets_dog=1&housing_type=6";
 
 const moment = require('moment');
 let rentals = [];

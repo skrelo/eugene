@@ -1,4 +1,4 @@
-const url = "https://www.trulia.com/for_rent/Eugene,OR/1200-1800_price/SINGLE-FAMILY_HOME_type/lg_dogs,sm_dogs_pets/";
+const url = "https://www.trulia.com/for_rent/ROSEBURG,OR/1200-1800_price/SINGLE-FAMILY_HOME_type/lg_dogs,sm_dogs_pets/";
 
 const Sites = require('../sites');
 const moment = require('moment');
